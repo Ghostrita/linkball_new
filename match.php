@@ -297,7 +297,7 @@ include 'inc/config.php';
 
 
 <div class="row" style="height:100% ">
-  <!-- admi user -----------------------------------asdasdasdasdasdasd------------------->
+  <!-- match -----------------------------------asdasdasdasdasdasd------------------->
   <div class="column6">
     <div class="col-md-12">
       <div class="card my-4 ">
@@ -428,9 +428,6 @@ include 'inc/config.php';
                       
                       //echo $page_total;
 
-                      
-                      
-
                       $i2 = 0;
                       $rowx = [];
                       $rows = mysqli_num_rows( $resultx );
@@ -489,11 +486,11 @@ include 'inc/config.php';
                         <td><?php  ?></td>
                         <td><?php  ?></td>
                         <td class="align-middle text-center">
-                            <a href="index.php?page=update" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                            <a href="match.php?page=update" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit match">
                               Edit
                             </a>
                             <br>
-                            <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                            <a href="delete-match.php?deleteid=<?php echo $match_id; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete match">
                               Delete
                             </a>
                         </td>
@@ -545,54 +542,87 @@ include 'inc/config.php';
           </div>
           <div class="card-body px-0 pb-2">
             <div class="table-responsive p-0">
-              <section id="create_user">
+              <section id="create_match">
                 <form method="POST">   
-              <table class="table align-items-center mb-0">
-                <tbody>
-                  <tr>
-                    <td>League</td>
-                    <td>
-                      <input type="text" name="league" class="input-small" placeholder="">  
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Home Team
-                    </td>
-                    <td>
-                      <input type="text" name="home-team" class="input-small" placeholder="">
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Away Team</td>
-                    <td>
-                      <input type="text" name="away-team" class="input-small" placeholder="">
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Date</td>
-                    <td>
-                        <input type="text" name="date" class="input-small" placeholder="">
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Time</td>
-                    <td>
-                      <input type="text" name="time" class="input-small" placeholder="">
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Channel</td>
-                    <td>
-                      <input type="number" name="channel" class="input-small" placeholder="">
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <input type="submit">  
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                  <table class="table align-items-center mb-0">
+                    <tbody>
+                      <tr>
+                        <td>League</td>
+                        <td>
+                          <!-- <input type="text" name="league" class="input-small" placeholder="League">   -->
+                          <select name="league" class="text">
+                            <?php 
+                              $sql = mysqli_query($conn, "SELECT league FROM league");
+                              while ($row = $sql->fetch_assoc()){
+                                echo "<option value=\"$league\">" . $row['league'] . "</option>";
+                              }
+                            ?>
+                          </select>
+                        </td>
+                      </tr>
+                      <?php echo ""; ?>
+                      <tr>
+                        <td>Home Team</td>
+                        <td>
+                          <!-- <input type="text" name="home-team" class="input-small" placeholder="Home Team"> -->
+                          <select name="home-team" class="text">
+                            <?php 
+                              $sql = mysqli_query($conn, "SELECT team FROM team");
+                              while ($row = $sql->fetch_assoc()){
+                                echo "<option value=\"$team\">" . $row['team'] . "</option>";
+                              }
+                              echo $team;
+                            ?>
+                          </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Away Team</td>
+                        <td>
+                          <!-- <input type="text" name="away-team" class="input-small" placeholder="Away Team"> -->
+                          <select name="away-team" class="text">
+                            <?php 
+                              $sql = mysqli_query($conn, "SELECT team FROM team");
+                              while ($row = $sql->fetch_assoc()){
+                                echo "<option value=\"$team\">" . $row['team'] . "</option>";
+                              }
+                            ?>
+                          </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Date</td>
+                        <td>
+                          <input type="date" name="date" class="input-small">
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Time</td>
+                        <td>
+                          <input type="time" name="time" class="input-small" placeholder="Time">
+                        </td>
+                      </tr>
+                      <!-- <tr>
+                        <td>Date-Time</td>
+                        <td>
+                          <input type="datetime-local" name="datetime" class="input-small">
+                        </td>
+                      </tr> -->
+                      <tr>
+                        <td>Channel</td>
+                        <td>
+                          <input type="number" name="channel" class="input-small" placeholder="Channel">
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <input type="submit" name="create-match" class="signin">  
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </form>
+              </section>
             </div>
           </div>
         </div>
@@ -611,35 +641,37 @@ include 'inc/config.php';
         
         //include 'inc/config.php';
 
-            // CREATE USER LOGIC
-            if(@$_GET['action'] == "create-match" && 
-            isset($_POST['username']) && 
-            isset($_POST['password']) &&
-            isset($_POST['name']) &&
-            isset($_POST['email']) &&
-            isset($_POST['tel']) &&
-            isset($_POST['role'])){
-              $username = $_POST['username'];
-              $password = md5($_POST['password']);
-              $name = $_POST['name'];
-              $email = $_POST['email'];
-              $tel = $_POST['tel'];
-              $regis_date = date('Y-m-d H:i:s');
-              $role = $_POST['role'];
+            // CREATE MATCH LOGIC
+            if(
+            isset($_POST['league']) && 
+            isset($_POST['home-team']) &&
+            isset($_POST['away-team']) &&
+            isset($_POST['date']) &&
+            isset($_POST['time']) &&
+            isset($_POST['channel']) ){
+              $league = $_POST['league'];
+              $hometeam = $_POST['home-team'];
+              $awayteam = $_POST['away-team'];
+              $date = $_POST['date'];
+              $time = $_POST['time'];
+              $channel = $_POST['channel'];
+              //$regis_date = date('Y-m-d H:i:s');
             
-              $checkUser = "SELECT username FROM users WHERE username = \"$username\"";   //
-              $checkName = "SELECT name FROM users WHERE name = \"$name\"";
-              $check_result_user = $conn->query($checkUser);
-              $check_result_name = $conn->query($checkName);
+              // $checkLeague = "SELECT league FROM league WHERE league = \"$league\"";   //
+              // $checkHometeam = "SELECT team FROM team WHERE team = \"$hometeam\"";
+              // $checkAwayteam = "SELECT team FROM team WHERE team = \"$awayteam\"";
+              // $check_result_league = $conn->query($checkLeague);
+              // $check_result_hometeam = $conn->query($checkHometeam);
+              // $check_result_awayteam = $conn->query($checkAwayteam);
               //echo "All Recoreds : ".$check_result->num_rows."<br>";
-            
-              if(strlen($username) >= 4 && strlen($username) < 16 ){
-                if($check_result_user->num_rows > 0){
-                  echo "<div style=\"text-align: center; padding-top:50px\">error this user is exist</div>";
+              echo "...................$league $hometeam $awayteam";
+              if($hometeam || $awayteam){
+                if($hometeam === $awayteam){
+                  echo "<div style=\"text-align: center; padding-top:50px\">error hometeam must not same awayteam</div>";
                 }
                 else{
-                    $queryCommand = "INSERT INTO users(username,password,email,tel,name,regis_date,role)
-                    VALUES('$username','$password','$email','$tel','$name','$regis_date','$role')";
+                    $queryCommand = "INSERT INTO match(league,hometeam,awayteam,date,time)
+                    VALUES('$league','$hometeam','$awayteam','$date','$time')";
                       //echo $queryCommand;
                     $insert_result = $conn->query($queryCommand); 
                     if($insert_result){
@@ -656,7 +688,41 @@ include 'inc/config.php';
       ?>
 </div>
 
+  <!--main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ps ps--active-y">
+    <div class="container-fluid py-4">
+      <!--?php 
+        if(@$_GET['page'] == 'admin')
+          include("admin.php");
 
+        if(@$_GET['page'] == 'user')
+          include("user.php");
+
+        /*if(@strpos($_GET['page'], 'update') != -1)
+          include("update.php");*/
+
+        if(@$_GET['page'] == 'match')
+          include("match.php");
+
+        if(@$_GET['action'] == 'create-user')
+          include("admin.php");
+
+        if(@$_GET['action'] == 'update'){
+          include("admin.php");
+
+        }
+          
+
+        /*if(@$_GET['action'] == 'update'){
+          include("update.php");
+        }*/
+
+        /*if(@$_GET['action'] == 'update.php?updateid=$id')
+          include("update.php");*/
+      ?>
+      
+      
+    </div>
+  </!--main>
 </body>
 </html>
 
