@@ -1,0 +1,23 @@
+{
+  "name": "linkball_new",
+  "version": "1.0.0",
+  "description": "for linkball",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "scss": "node-sass --watch scss -o css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kingzjoker/linkball_new.git"
+  },
+  "author": "kingzjoker",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kingzjoker/linkball_new/issues"
+  },
+  "homepage": "https://github.com/kingzjoker/linkball_new#readme",
+  "dependencies": {
+    "node-sass": "^7.0.1"
+  }
+}
